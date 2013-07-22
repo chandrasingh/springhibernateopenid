@@ -1,10 +1,15 @@
 package com.imaginea.model;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -22,6 +27,8 @@ public class EmployeeDetails {
 	private String firstName;
 	
 	private String lastName;
+	
+	private Set<Leaves> leaves;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -77,5 +84,15 @@ public class EmployeeDetails {
 	
 	public void setLastName(String value){
 		lastName = value;
+	}
+
+	@OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name="employeeId")
+	public Set<Leaves> getLeaves(){
+		return leaves;
+	}
+	
+	public void setLeaves(Set<Leaves> value){
+		leaves = value;
 	}
 }

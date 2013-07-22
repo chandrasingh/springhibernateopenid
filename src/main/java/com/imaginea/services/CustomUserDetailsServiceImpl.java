@@ -17,16 +17,11 @@ import org.springframework.security.openid.OpenIDAttribute;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.stereotype.Service;
 
-import com.imaginea.model.EmployeeDetails;
-
 @Service("CustomUserDetailsService")
-public class CustomUserDetailsServiceImpl implements
-		AuthenticationUserDetailsService, UserDetailsService {
+public class CustomUserDetailsServiceImpl implements AuthenticationUserDetailsService, UserDetailsService {
 
-	@Autowired
-	EmployeeDetailsService employeeDetailsServices;
 	
-	
+	@SuppressWarnings("deprecation")
 	public UserDetails loadUserByUsername(String identityURL)
 			throws UsernameNotFoundException, DataAccessException {
 		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
@@ -37,6 +32,7 @@ public class CustomUserDetailsServiceImpl implements
 		return user;
 	}
 
+	@SuppressWarnings("deprecation")
 	public UserDetails loadUserDetails(Authentication token)
 			throws UsernameNotFoundException {
 		System.out.println("in loadUserDetails>>>>>");
@@ -44,10 +40,10 @@ public class CustomUserDetailsServiceImpl implements
 		String identifier = openidToken.getIdentityUrl();
 		String email = "";
 		List<OpenIDAttribute> attributes = openidToken.getAttributes();
-		List<EmployeeDetails> employeesDetails;
-		EmployeeDetails employeeDetails;
 		
 		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+		User user = new User(identifier, "", false, false, false, false, authorities);
+		
 		authorities.add(new GrantedAuthorityImpl("ROLE_USER"));
 		
 		for (OpenIDAttribute attribute : attributes) {
@@ -60,33 +56,7 @@ public class CustomUserDetailsServiceImpl implements
 			throw new UsernameNotFoundException("User is not registered with us.");
 		}else{
 			System.out.println("email>>>>>>" + email);
-			employeesDetails = employeeDetailsServices.getEmployeeDetailsForEmail(email);
 		}
-		
-		if(employeesDetails.size() == 1){
-			employeeDetails = employeesDetails.get(0);
-			System.out.println("employeeDetails>>>>>>" + employeeDetails.getEmail());
-			System.out.println("employeeDetails>>>>>>" + employeeDetails.getFirstName());
-			System.out.println("employeeDetails>>>>>>" + employeeDetails.getLastName());
-			System.out.println("employeeDetails>>>>>>" + employeeDetails.getUserName());
-			System.out.println("employeeDetails>>>>>>" + employeeDetails.getId());
-		}else{
-			throw new UsernameNotFoundException("User is not registered with us.");
-		}
-		
-		User user = new User(identifier, "", false, false, false, false, authorities);
-		
-		
-		
-		if(identifier != ""){
-			employeeDetails.setUserName(identifier);
-			employeeDetailsServices.updateEmployeeDetails(employeeDetails);
-		}else{
-			throw new UsernameNotFoundException("Unable to fetch Identity url.");
-		}
-		
-		
-		
 		
 		return user;
 	}
