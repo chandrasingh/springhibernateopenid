@@ -17,47 +17,66 @@ import org.springframework.security.openid.OpenIDAttribute;
 import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.stereotype.Service;
 
-@Service("CustomUserDetailsService")
-public class CustomUserDetailsServiceImpl implements AuthenticationUserDetailsService, UserDetailsService {
+import com.imaginea.model.EmployeeDetails;
 
-	
+@Service("CustomUserDetailsService")
+public class CustomUserDetailsServiceImpl implements
+		AuthenticationUserDetailsService, UserDetailsService {
+
+	@Autowired
+	private EmployeeService employeeService;
+
 	@SuppressWarnings("deprecation")
 	public UserDetails loadUserByUsername(String identityURL)
 			throws UsernameNotFoundException, DataAccessException {
 		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		authorities.add(new GrantedAuthorityImpl("ROLE_USER"));
-		
-		User user = new User(identityURL, "", false, false, false, false, authorities);
-		
+
+		User user = new User(identityURL, "", false, false, false, false,
+				authorities);
+
 		return user;
 	}
 
 	@SuppressWarnings("deprecation")
 	public UserDetails loadUserDetails(Authentication token)
 			throws UsernameNotFoundException {
-		System.out.println("in loadUserDetails>>>>>");
-		OpenIDAuthenticationToken openidToken = (OpenIDAuthenticationToken)token;
+		OpenIDAuthenticationToken openidToken = (OpenIDAuthenticationToken) token;
 		String identifier = openidToken.getIdentityUrl();
 		String email = "";
 		List<OpenIDAttribute> attributes = openidToken.getAttributes();
-		
+
+		EmployeeDetails employee;
+		List<EmployeeDetails> employeeList;
+
 		ArrayList<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		User user = new User(identifier, "", false, false, false, false, authorities);
-		
 		authorities.add(new GrantedAuthorityImpl("ROLE_USER"));
-		
+
+		User user = new User(identifier, "", false, false, false, false,
+				authorities);
+
 		for (OpenIDAttribute attribute : attributes) {
-            if (attribute.getName().equals("email")) {
-                email = attribute.getValues().get(0);
-            }
+			if (attribute.getName().equals("email")) {
+				email = attribute.getValues().get(0);
+			}
 		}
-		
-		if(email == ""){
+
+		if (email.equals("")) {
+			throw new UsernameNotFoundException("Unable to retrieve email id.");
+		}
+
+		employeeList = employeeService.getEmployeeDetail("email", email);
+
+		if (employeeList.size() == 0) {
 			throw new UsernameNotFoundException("User is not registered with us.");
-		}else{
-			System.out.println("email>>>>>>" + email);
 		}
-		
+
+		employee = employeeList.get(0);
+
+		employee.setUserName(identifier);
+
+		employeeService.updateEmployeeDetail(employee);
+
 		return user;
 	}
 

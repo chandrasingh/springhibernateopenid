@@ -1,7 +1,5 @@
 package com.imaginea.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,7 +35,7 @@ public class Leaves {
 		id = value;
 	}
 
-	@Column(name="from", unique = false, nullable = false, length = 15)
+	@Column(name="from", unique = false, nullable = false, length = 45)
    	public String getFrom(){
 		return from;
 	}
@@ -46,7 +44,7 @@ public class Leaves {
 		from = value;
 	}
 
-	@Column(name="to", unique = false, nullable = false, length = 15)
+	@Column(name="to", unique = false, nullable = false, length = 45)
    	public String getTo(){
 		return to;
 	}

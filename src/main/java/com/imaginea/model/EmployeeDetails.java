@@ -13,86 +13,86 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="employees_details")
+@Table(name = "employees_details")
 public class EmployeeDetails {
-	
+
 	private Integer id;
-	
+
 	private String email;
-	
+
 	private Integer managerId;
-	
+
 	private String userName;
-	
+
 	private String firstName;
-	
+
 	private String lastName;
-	
+
 	private Set<Leaves> leaves;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
-	public Integer getId(){
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Integer value){
+	public void setId(Integer value) {
 		id = value;
 	}
-	
-	@Column(name="manager_id", unique = false, nullable = false)
-	public Integer getManagerId(){
+
+	@Column(name = "manager_id", unique = false, nullable = false)
+	public Integer getManagerId() {
 		return managerId;
 	}
 
-	public void setManagerId(Integer value){
+	public void setManagerId(Integer value) {
 		managerId = value;
 	}
 
-	@Column(name="email", unique = true, nullable = false, length = 45)
-	public String getEmail(){
+	@Column(name = "email", unique = true, nullable = false, length = 45)
+	public String getEmail() {
 		return email;
 	}
-	
-	public void setEmail(String value){
+
+	public void setEmail(String value) {
 		email = value;
 	}
-	
-	@Column(name="user_name", unique = false, nullable = false, length = 500)
-	public String getUserName(){
+
+	@Column(name = "user_name", unique = false, nullable = false, length = 500)
+	public String getUserName() {
 		return userName;
 	}
-	
-	public void setUserName(String value){
-		email = userName;
+
+	public void setUserName(String value) {
+		userName = value;
 	}
-	
-	@Column(name="first_name", unique = false, nullable = false, length = 45)
-	public String getFirstName(){
+
+	@Column(name = "first_name", unique = false, nullable = false, length = 45)
+	public String getFirstName() {
 		return firstName;
 	}
-	
-	public void setFirstName(String value){
+
+	public void setFirstName(String value) {
 		firstName = value;
 	}
-	
-	@Column(name="last_name", unique = false, nullable = false, length = 45)
-	public String getLastName(){
+
+	@Column(name = "last_name", unique = false, nullable = false, length = 45)
+	public String getLastName() {
 		return lastName;
 	}
-	
-	public void setLastName(String value){
+
+	public void setLastName(String value) {
 		lastName = value;
 	}
 
-	@OneToMany(cascade=CascadeType.ALL)
-    @JoinColumn(name="employeeId")
-	public Set<Leaves> getLeaves(){
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "employeeId")
+	public Set<Leaves> getLeaves() {
 		return leaves;
 	}
-	
-	public void setLeaves(Set<Leaves> value){
+
+	public void setLeaves(Set<Leaves> value) {
 		leaves = value;
 	}
 }

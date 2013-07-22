@@ -40,7 +40,7 @@
 		</property>
 		<property name="annotatedClasses">
 			<list>
-				<value>com.imaginea.model.LeaveApplication</value>
+				<value>com.imaginea.model.Leaves</value>
 				<value>com.imaginea.model.EmployeeDetails</value>
 			</list>
 		</property>
